@@ -5,17 +5,22 @@ agk SHA (`gbvraju/agk` `main`, cloned read-only to `../agk-kit`): `d64c42c7e4b71
 
 ## Notes
 
-- The first dry run refused with `cannot tell the default branch from TARGET/.git`. The clone had no
-  `refs/remotes/origin/HEAD`; I created it locally (`git symbolic-ref refs/remotes/origin/HEAD refs/remotes/origin/master`),
-  a ref inside `.git` that is not tracked. The outputs below are from the runs after that.
-- `reviewers.py --codeowners` prints the rendering to stdout and does not write the file; I redirected its
-  output into `.github/CODEOWNERS` (`... --codeowners > .github/CODEOWNERS`).
 - `agk-test` needed pytest; it ran in a throwaway venv outside the repository (`/home/user/agk-venv`).
+- Findings (a) to (c) below.
 
 ## Findings
 
+(a) **Missing `origin/HEAD` in session clones.** `adopt.py` refused (`cannot tell the default branch from
+TARGET/.git`) because the clone had no `refs/remotes/origin/HEAD`. I created it locally with
+`git symbolic-ref refs/remotes/origin/HEAD refs/remotes/origin/master`; the change is inside `.git` only and no
+tracked file is affected.
+
+(b) **`--codeowners` prints to stdout.** `reviewers.py --codeowners` writes the rendering to stdout and does not
+write `.github/CODEOWNERS`, unlike the brief ("writes the whole file when adopt created it"). I redirected its output
+into the file (`... --codeowners > .github/CODEOWNERS`); `--check-codeowners` then passed.
+
 (c) **Adoption adds a new lint failure.** The project's `lint_python.yml` already fails on upstream master (since
-2026-05-13, as reported by the maintainers; not re-verified here). Adoption adds a separate failure on top: the CI
+2026-05-13, verified by the reviewer from the upstream Actions page). Adoption adds a separate failure on top: the CI
 step `bandit --recursive --skip B311 .` reports 255 findings in kit files on this branch and 0 on `master`
 (checked locally with bandit run from the throwaway venv, same flags, on `origin/master` and on `adopt-agk`).
 
@@ -27,8 +32,8 @@ step `bandit --recursive --skip B311 .` reports 255 findings in kit files on thi
 | B404 (subprocess import) | 5 | `tests/kit` 3, `scripts/agk` 1, `.claude/hooks` 1 |
 
 Without `--skip B311`, bandit counts 6 B311 findings (`demos/demo06.py`) on both `master` and the branch; they are
-not new. No kit file or workflow was changed to silence the findings. Whether to scope or skip them is a
-maintainer decision (Q-FK-3).
+not new. No kit file or workflow was changed to silence the findings. Ruling on Q-FK-3: the red `lint_python` is
+accepted for this PR (already red upstream; the kit's part is recorded here); the fix goes in agk.
 
 ## Zero-touch proof
 
