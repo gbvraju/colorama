@@ -11,3 +11,10 @@ virtualenv
 
 # PyCharm
 .idea
+# >>> agk
+__pycache__/
+.pytest_cache/
+.ruff_cache/
+traceability*.md
+traceability*.txt
+# <<< agk
