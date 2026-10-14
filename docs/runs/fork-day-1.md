@@ -12,6 +12,24 @@ agk SHA (`gbvraju/agk` `main`, cloned read-only to `../agk-kit`): `d64c42c7e4b71
   output into `.github/CODEOWNERS` (`... --codeowners > .github/CODEOWNERS`).
 - `agk-test` needed pytest; it ran in a throwaway venv outside the repository (`/home/user/agk-venv`).
 
+## Findings
+
+(c) **Adoption adds a new lint failure.** The project's `lint_python.yml` already fails on upstream master (since
+2026-05-13, as reported by the maintainers; not re-verified here). Adoption adds a separate failure on top: the CI
+step `bandit --recursive --skip B311 .` reports 255 findings in kit files on this branch and 0 on `master`
+(checked locally with bandit run from the throwaway venv, same flags, on `origin/master` and on `adopt-agk`).
+
+| Test | Count | Where |
+| ---- | ----- | ----- |
+| B101 (assert) | 224 | `tests/kit` |
+| B603 (subprocess call) | 17 | `tests/kit` 12, `scripts/agk` 4, `.claude/hooks` 1 |
+| B607 (partial executable path) | 9 | `tests/kit` 4, `scripts/agk` 4, `.claude/hooks` 1 |
+| B404 (subprocess import) | 5 | `tests/kit` 3, `scripts/agk` 1, `.claude/hooks` 1 |
+
+Without `--skip B311`, bandit counts 6 B311 findings (`demos/demo06.py`) on both `master` and the branch; they are
+not new. No kit file or workflow was changed to silence the findings. Whether to scope or skip them is a
+maintainer decision (Q-FK-3).
+
 ## Zero-touch proof
 
 `git ls-files -s` before (49 files) against after `git add -A` (96 files). Pre-existing tracked files whose entry

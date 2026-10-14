@@ -1,6 +1,6 @@
 # ADR-0001: colorama adopts agk
 
-- Status: Proposed
+- Status: Accepted
 - Date: 2026-10-14
 - Deciders: maintainers
 - Related: none
