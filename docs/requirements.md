@@ -21,3 +21,8 @@ Only the Status line may change without an ADR. `done` requires at least one tes
 
 - Acceptance: AC1 matrix generated; AC2 done requires a marker; AC3 matrix never committed
 - Status: planned
+
+### REQ-101 — Foreground colours emit standard ANSI codes
+
+- Acceptance: AC1 `Fore.RED` is `ESC[31m` and `Fore.RESET` is `ESC[39m`
+- Status: planned
