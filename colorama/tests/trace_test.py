@@ -1,4 +1,4 @@
-# Copyright Jonathan Hartley 2013. BSD 3-Clause license, see LICENSE file.
+# BSD 3-Clause license, see LICENSE.txt file.
 from unittest import TestCase, main
 
 from ..ansi import Fore

@@ -1,6 +1,6 @@
 # ADR-0002: Trace the foreground ANSI codes
 
-- Status: Proposed
+- Status: Accepted
 - Date: 2026-10-14
 - Deciders: maintainers
 - Related: ADR-0001
